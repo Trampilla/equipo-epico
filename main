@@ -1,0 +1,77 @@
+#include <QTRSensors.h>
+#include "motores.h"
+#include <BluetoothSerial.h>
+QTRSensors siguelineas;
+BluetoothSerial SerialBT;
+#if  !defined(CONFIG_BT_ENABLED)|| !defined(CONFIG_BLUEDROID_ENABLED)
+#error Fallo de bluetooth
+#endif
+
+
+const uint8_t SensorCount = 8;
+uint16_t sensorValues[SensorCount]; 
+
+int cont = 0; 
+
+int current; 
+void setup() {
+ 
+motorsetup();
+Serial.begin(9600);
+SerialBT.begin("Miku");
+
+  // put your setup code here, to run once:
+
+siguelineas.setSensorPins((const uint8_t[]) {26, 25, 33, 32, 35, 34, 36, 39}, SensorCount);
+siguelineas.setEmitterPin(27);
+
+for(int i = 0; i < 400; i++){
+  siguelineas.calibrate();
+  }
+}
+
+void loop() {
+  current = casos(); 
+  while(cont <= 2){
+    if(current == 1){
+      SerialBT.print("intersección negro");
+      motor(0,0); 
+      delay(500); 
+      motor(20,20); 
+      cont++; 
+   
+     }
+     if(cont == 3){
+      break; 
+     }
+     
+   }
+   if(current = 0){
+    //pid
+   }
+   else if(current == 1){
+    SerialBT.print("intersección negro");
+    motor(0,0); 
+    delay(500); 
+    motor(20,20); 
+   }else if(current == 2){
+     SerialBT.print("GAP blanco");
+    motor(0,0); 
+    delay(500); 
+    motor(30,30); 
+   }else if(current == 3){
+    SerialBT.print("girar izquierda");
+    motor(30,-30); 
+    delay(200); 
+    motor(30,30); 
+    
+   }else if(current == 4){
+    SerialBT.print("girar derecha");
+    motor(-30,30); 
+    delay(200); 
+    motor(30,30); 
+   }
+  
+  // put your main code here, to run repeatedly:
+
+}
