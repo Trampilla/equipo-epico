@@ -1,0 +1,47 @@
+int umbral = 3000; 
+bool derecha = false; 
+bool izquierda = false; 
+bool negro = false; 
+bool blanco = false; 
+
+
+int casos(){
+  for(int i = 0; i < 8; i++){
+    if(sensorValues[i] < umbral){
+      negro = true;
+      blanco = false; 
+    }
+    if(sensorValues[i] >= umbral){
+      blanco = true; 
+      negro = false; 
+    }
+    if(i < 3 && sensorValues[i] >= umbral){
+       izquierda = true; 
+       derecha = false; 
+      }
+   
+    if(i > 4 && sensorValues[i] >= umbral){
+      derecha = true;
+      izquierda = false; 
+      
+    }  
+   }
+   if(negro == true){
+    return 1; 
+    }
+   else if(blanco == true){
+    return 2; 
+    }
+   else if(izquierda == true){
+    return 3; 
+    }
+   else if(derecha == true){
+    return 4; 
+    }
+
+   else{
+    return 0;
+    } //linea
+   
+  
+  }
